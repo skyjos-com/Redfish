@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Settings>
+  <Port Number="20445"/>
+  <Users>
+    <User AccountName="Redfish" Password=""></User>
+  </Users>
+</Settings>
