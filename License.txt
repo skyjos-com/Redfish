@@ -5,7 +5,8 @@ code under a commercial license. You also allow Skyjos to relicense the
 project to a different open source license, never more restrictive than
 the GPL(like a BSD/MIT/Apache license).
 
-========================================
+================================================================================
+
                    GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
