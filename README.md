@@ -21,4 +21,4 @@ The 445 port is taken by Windows file sharing service, so Redfish use 20445 as d
 
 ## Contact:
 
-If you have any suggestions or questions, feel free to contact us[support@skyjos.com](support@skyjos.com).
+If you have any suggestions or questions, feel free to contact us [support@skyjos.com](support@skyjos.com).
