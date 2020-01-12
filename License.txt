@@ -1,3 +1,11 @@
+Redfish is released under GPLv3 and is also available under a commercial license.
+
+By contributing to this project, you allow Skyjos to reship the unmodified
+code under a commercial license. You also allow Skyjos to relicense the 
+project to a different open source license, never more restrictive than
+the GPL(like a BSD/MIT/Apache license).
+
+========================================
                    GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
