@@ -21,8 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMBLibrary.Tests", "SMBServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedfishService", "RedfishService\RedfishService.csproj", "{38A12EE3-C270-442C-B53E-D84D65F50719}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{2C7CFFE7-093F-4E02-BE7F-D6BAE915553F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,8 +51,6 @@ Global
 		{38A12EE3-C270-442C-B53E-D84D65F50719}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38A12EE3-C270-442C-B53E-D84D65F50719}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38A12EE3-C270-442C-B53E-D84D65F50719}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2C7CFFE7-093F-4E02-BE7F-D6BAE915553F}.Debug|Any CPU.ActiveCfg = Debug
-		{2C7CFFE7-093F-4E02-BE7F-D6BAE915553F}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

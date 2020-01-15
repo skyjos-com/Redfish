@@ -256,7 +256,7 @@ namespace RedfishService
 
         private static string GetSettingsFilePath()
         {
-            string appFolderPath = CommonUtils.GetAppFolderPath();
+            string appFolderPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string filePath = appFolderPath + "\\" + SettingsFileName;
             if (!File.Exists(filePath))
             {
