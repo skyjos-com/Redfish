@@ -114,6 +114,14 @@ namespace Redfish
                 return;
             }
 
+            UserCollection users = new UserCollection();
+            users.Add(new User(accountName, password));
+            // Save account if necessary
+            if (this.NeedUpdateUserCollection())
+            {
+                SettingsHelper.WriteUserSettings(users);
+            }
+
             bool runAsService = this.service_checkbox.IsChecked ?? false;
             if (runAsService)
             {
@@ -138,15 +146,6 @@ namespace Redfish
             }
             else
             {
-                UserCollection users = new UserCollection();
-                users.Add(new User(accountName, password));
-
-                // Save account if necessary
-                if (this.NeedUpdateUserCollection())
-                {
-                    SettingsHelper.WriteUserSettings(users);
-                }
-
                 KeyValuePair<string, IPAddress> selectedValue = (KeyValuePair<string, IPAddress>)this.address_combobox.SelectedValue;
                 IPAddress serverAddress = selectedValue.Value;
                 SMBTransportType transportType = SMBTransportType.DirectTCPTransport;

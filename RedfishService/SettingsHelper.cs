@@ -256,7 +256,17 @@ namespace RedfishService
 
         private static string GetSettingsFilePath()
         {
-            string filePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\" + SettingsFileName;
+            string appFolderPath = CommonUtils.GetAppFolderPath();
+            string filePath = appFolderPath + "\\" + SettingsFileName;
+            if (!File.Exists(filePath))
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
+                sb.Append(Environment.NewLine);
+                sb.Append("<Settings/>");
+                File.WriteAllText(filePath, sb.ToString());
+            }
+            
             return filePath;
         }
     }

@@ -18,7 +18,7 @@
             </StackPanel>
             <StackPanel Margin="0,15,15,0" Orientation="Horizontal" Height="25">
                 <Label Content="User Name" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.991,-0.618" HorizontalContentAlignment="Right" Width="100"/>
-                <TextBox x:Name="username_textbox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Guest" VerticalAlignment="Top" Width="120" Margin="10,0,0,0"/>
+                <TextBox x:Name="username_textbox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Redfish" VerticalAlignment="Top" Width="120" Margin="10,0,0,0"/>
             </StackPanel>
             <StackPanel Margin="0,15,15,0" Orientation="Horizontal" Height="25">
                 <Label Content="Password" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.991,-0.618" HorizontalContentAlignment="Right" Width="100"/>
