@@ -65,12 +65,15 @@ namespace Redfish
 
 
             UserCollection users = this.GetUserCollection();
-            List<string> userNames = users.ListUsers();
-            if (userNames.Count > 0)
+            if (users != null)
             {
-                string username = userNames[0];
-                this.username_textbox.Text = username;
-                this.password_box.Password = users.GetUserPassword(username);
+                List<string> userNames = users.ListUsers();
+                if (userNames.Count > 0)
+                {
+                    string username = userNames[0];
+                    this.username_textbox.Text = username;
+                    this.password_box.Password = users.GetUserPassword(username);
+                }
             }
 
             m_sharesSettings = this.GetShareSettings();
