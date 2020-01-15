@@ -3,7 +3,7 @@
 Redfish is a simple and flexible SMB server on Windows. It was started by [Skyjos](https://www.skyjos.com) team and open source on GitHub. Redfish gives you an alternative way to run file sharing service on Windows. It's more flexible and simpler than Windows file sharing service. You could set up share folders, user account even change the port in the application.
 
 ## Screenshots:
-![Screenshot-w250](https://github.com/skyjos-com/Redfish/blob/master/screenshot_1.PNG)
+![](https://github.com/skyjos-com/Redfish/blob/master/screenshot_1.PNG)
 
 ## How it works:
 
