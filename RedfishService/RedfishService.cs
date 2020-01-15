@@ -20,9 +20,9 @@ namespace RedfishService
 {
     public partial class RedfishService : ServiceBase
     {
+        private LogWriter m_logWriter = new LogWriter();
         private SMBLibrary.Server.SMBServer m_server;
         private SMBLibrary.Server.NameServer m_nameServer;
-        private LogWriter m_logWriter;
 
         public RedfishService()
         {
@@ -41,8 +41,6 @@ namespace RedfishService
 
         private void StartService()
         {
-            m_logWriter = new LogWriter();
-
             IPAddress serverAddress = IPAddress.Any;
             SMBTransportType transportType = SMBTransportType.DirectTCPTransport;
 
