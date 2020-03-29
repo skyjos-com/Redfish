@@ -10,7 +10,7 @@
         <Image HorizontalAlignment="Left" Height="100" Margin="20,20,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="0.364,-0.077" Source="../Resources/app_logo.png" />
         <Grid Margin="0,20,20,0" HorizontalAlignment="Right" VerticalAlignment="Top" Height="115">
             <Label Content="Redfish SMB Server" HorizontalAlignment="Right" VerticalAlignment="Top" FontWeight="Bold" FontSize="24"/>
-            <Label Content="Version 1.0" HorizontalAlignment="Center" Margin="0,40,0,0" VerticalAlignment="Top"/>
+            <Label Content="Version 1.1" HorizontalAlignment="Center" Margin="0,40,0,0" VerticalAlignment="Top"/>
             <Label Content="Copyright (c) Skyjos and Authors" HorizontalAlignment="Center" Margin="0,66,0,0" VerticalAlignment="Top"/>
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,95,0,0">           
                 <Hyperlink NavigateUri="https://github.com/skyjos-com/Redfish" RequestNavigate="Hyperlink_Website">

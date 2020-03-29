@@ -1,4 +1,4 @@
-/* Copyright (C) 2014-2019 Tal Aloni <tal.aloni.il@gmail.com>. All rights reserved.
+/* Copyright (C) 2014-2020 Tal Aloni <tal.aloni.il@gmail.com>. All rights reserved.
  * 
  * You can redistribute this program and/or modify it under the terms of
  * the GNU Lesser Public License as published by the Free Software Foundation,
@@ -20,12 +20,13 @@ namespace SMBLibrary.Client
 {
     public class SMB1Client : ISMBClient
     {
-        public const int NetBiosOverTCPPort = 139;
-        public const int DirectTCPPort = 445;
-        public const string NTLanManagerDialect = "NT LM 0.12";
+        private const string NTLanManagerDialect = "NT LM 0.12";
         
-        public const ushort ClientMaxBufferSize = 65535; // Valid range: 512 - 65535
-        public const ushort ClientMaxMpxCount = 1;
+        public static readonly int NetBiosOverTCPPort = 139;
+        public static readonly int DirectTCPPort = 445;
+
+        private static readonly ushort ClientMaxBufferSize = 65535; // Valid range: 512 - 65535
+        private static readonly ushort ClientMaxMpxCount = 1;
 
         private SMBTransportType m_transport;
         private bool m_isConnected;
@@ -43,6 +44,9 @@ namespace SMBLibrary.Client
         private object m_incomingQueueLock = new object();
         private List<SMB1Message> m_incomingQueue = new List<SMB1Message>();
         private EventWaitHandle m_incomingQueueEventHandle = new EventWaitHandle(false, EventResetMode.AutoReset);
+
+        private SessionPacket m_sessionResponsePacket;
+        private EventWaitHandle m_sessionResponseEventHandle = new EventWaitHandle(false, EventResetMode.AutoReset);
 
         private ushort m_userID;
         private byte[] m_serverChallenge;
@@ -64,29 +68,55 @@ namespace SMBLibrary.Client
             if (!m_isConnected)
             {
                 m_forceExtendedSecurity = forceExtendedSecurity;
-                m_clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 int port;
-                if (transport == SMBTransportType.DirectTCPTransport)
-                {
-                    port = DirectTCPPort;
-                }
-                else
+                if (transport == SMBTransportType.NetBiosOverTCP)
                 {
                     port = NetBiosOverTCPPort;
                 }
-
-                try
+                else
                 {
-                    m_clientSocket.Connect(serverAddress, port);
+                    port = DirectTCPPort;
                 }
-                catch (SocketException)
+
+                if (!ConnectSocket(serverAddress, port))
                 {
                     return false;
                 }
+                
+                if (transport == SMBTransportType.NetBiosOverTCP)
+                {
+                    SessionRequestPacket sessionRequest = new SessionRequestPacket();
+                    sessionRequest.CalledName = NetBiosUtils.GetMSNetBiosName("*SMBSERVER", NetBiosSuffix.FileServiceService);
+                    sessionRequest.CallingName = NetBiosUtils.GetMSNetBiosName(Environment.MachineName, NetBiosSuffix.WorkstationService);
+                    TrySendPacket(m_clientSocket, sessionRequest);
 
-                ConnectionState state = new ConnectionState();
-                NBTConnectionReceiveBuffer buffer = state.ReceiveBuffer;
-                m_clientSocket.BeginReceive(buffer.Buffer, buffer.WriteOffset, buffer.AvailableLength, SocketFlags.None, new AsyncCallback(OnClientSocketReceive), state);
+                    SessionPacket sessionResponsePacket = WaitForSessionResponsePacket();
+                    if (!(sessionResponsePacket is PositiveSessionResponsePacket))
+                    {
+                        m_clientSocket.Disconnect(false);
+                        if (!ConnectSocket(serverAddress, port))
+                        {
+                            return false;
+                        }
+
+                        NameServiceClient nameServiceClient = new NameServiceClient(serverAddress);
+                        string serverName = nameServiceClient.GetServerName();
+                        if (serverName == null)
+                        {
+                            return false;
+                        }
+
+                        sessionRequest.CalledName = serverName;
+                        TrySendPacket(m_clientSocket, sessionRequest);
+
+                        sessionResponsePacket = WaitForSessionResponsePacket();
+                        if (!(sessionResponsePacket is PositiveSessionResponsePacket))
+                        {
+                            return false;
+                        }
+                    }
+                }
+
                 bool supportsDialect = NegotiateDialect(m_forceExtendedSecurity);
                 if (!supportsDialect)
                 {
@@ -100,6 +130,25 @@ namespace SMBLibrary.Client
             return m_isConnected;
         }
 
+        private bool ConnectSocket(IPAddress serverAddress, int port)
+        {
+            m_clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            
+            try
+            {
+                m_clientSocket.Connect(serverAddress, port);
+            }
+            catch (SocketException)
+            {
+                return false;
+            }
+
+            ConnectionState state = new ConnectionState(m_clientSocket);
+            NBTConnectionReceiveBuffer buffer = state.ReceiveBuffer;
+            m_clientSocket.BeginReceive(buffer.Buffer, buffer.WriteOffset, buffer.AvailableLength, SocketFlags.None, new AsyncCallback(OnClientSocketReceive), state);
+            return true;
+        }
+
         public void Disconnect()
         {
             if (m_isConnected)
@@ -111,13 +160,6 @@ namespace SMBLibrary.Client
 
         private bool NegotiateDialect(bool forceExtendedSecurity)
         {
-            if (m_transport == SMBTransportType.NetBiosOverTCP)
-            {
-                SessionRequestPacket sessionRequest = new SessionRequestPacket();
-                sessionRequest.CalledName = NetBiosUtils.GetMSNetBiosName("*SMBSERVER", NetBiosSuffix.FileServiceService); ;
-                sessionRequest.CallingName = NetBiosUtils.GetMSNetBiosName(Environment.MachineName, NetBiosSuffix.WorkstationService);
-                TrySendPacket(m_clientSocket, sessionRequest);
-            }
             NegotiateRequest request = new NegotiateRequest();
             request.Dialects.Add(NTLanManagerDialect);
 
@@ -358,8 +400,9 @@ namespace SMBLibrary.Client
         private void OnClientSocketReceive(IAsyncResult ar)
         {
             ConnectionState state = (ConnectionState)ar.AsyncState;
+            Socket clientSocket = state.ClientSocket;
 
-            if (!m_clientSocket.Connected)
+            if (!clientSocket.Connected)
             {
                 return;
             }
@@ -367,7 +410,7 @@ namespace SMBLibrary.Client
             int numberOfBytesReceived = 0;
             try
             {
-                numberOfBytesReceived = m_clientSocket.EndReceive(ar);
+                numberOfBytesReceived = clientSocket.EndReceive(ar);
             }
             catch (ArgumentException) // The IAsyncResult object was not returned from the corresponding synchronous method on this class.
             {
@@ -396,7 +439,7 @@ namespace SMBLibrary.Client
 
                 try
                 {
-                    m_clientSocket.BeginReceive(buffer.Buffer, buffer.WriteOffset, buffer.AvailableLength, SocketFlags.None, new AsyncCallback(OnClientSocketReceive), state);
+                    clientSocket.BeginReceive(buffer.Buffer, buffer.WriteOffset, buffer.AvailableLength, SocketFlags.None, new AsyncCallback(OnClientSocketReceive), state);
                 }
                 catch (ObjectDisposedException)
                 {
@@ -423,7 +466,7 @@ namespace SMBLibrary.Client
                 }
                 catch (Exception)
                 {
-                    m_clientSocket.Close();
+                    state.ClientSocket.Close();
                     break;
                 }
 
@@ -436,19 +479,7 @@ namespace SMBLibrary.Client
 
         private void ProcessPacket(SessionPacket packet, ConnectionState state)
         {
-            if (packet is SessionKeepAlivePacket && m_transport == SMBTransportType.NetBiosOverTCP)
-            {
-                // [RFC 1001] NetBIOS session keep alives do not require a response from the NetBIOS peer
-            }
-            else if (packet is PositiveSessionResponsePacket && m_transport == SMBTransportType.NetBiosOverTCP)
-            {
-            }
-            else if (packet is NegativeSessionResponsePacket && m_transport == SMBTransportType.NetBiosOverTCP)
-            {
-                m_clientSocket.Close();
-                m_isConnected = false;
-            }
-            else if (packet is SessionMessagePacket)
+            if (packet is SessionMessagePacket)
             {
                 SMB1Message message;
                 try
@@ -458,7 +489,7 @@ namespace SMBLibrary.Client
                 catch (Exception ex)
                 {
                     Log("Invalid SMB1 message: " + ex.Message);
-                    m_clientSocket.Close();
+                    state.ClientSocket.Close();
                     m_isConnected = false;
                     return;
                 }
@@ -475,6 +506,20 @@ namespace SMBLibrary.Client
                         m_incomingQueueEventHandle.Set();
                     }
                 }
+            }
+            else if ((packet is PositiveSessionResponsePacket || packet is NegativeSessionResponsePacket) && m_transport == SMBTransportType.NetBiosOverTCP)
+            {
+                m_sessionResponsePacket = packet;
+                m_sessionResponseEventHandle.Set();
+            }
+            else if (packet is SessionKeepAlivePacket && m_transport == SMBTransportType.NetBiosOverTCP)
+            {
+                // [RFC 1001] NetBIOS session keep alives do not require a response from the NetBIOS peer
+            }
+            else
+            {
+                Log("Inappropriate NetBIOS session packet");
+                state.ClientSocket.Close();
             }
         }
 
@@ -500,6 +545,26 @@ namespace SMBLibrary.Client
                 }
                 m_incomingQueueEventHandle.WaitOne(100);
             }
+            return null;
+        }
+
+        internal SessionPacket WaitForSessionResponsePacket()
+        {
+            const int TimeOut = 5000;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            while (stopwatch.ElapsedMilliseconds < TimeOut)
+            {
+                if (m_sessionResponsePacket != null)
+                {
+                    SessionPacket result = m_sessionResponsePacket;
+                    m_sessionResponsePacket = null;
+                    return result;
+                }
+
+                m_sessionResponseEventHandle.WaitOne(100);
+            }
+
             return null;
         }
 
@@ -585,7 +650,7 @@ namespace SMBLibrary.Client
         {
             get
             {
-                return ClientMaxBufferSize - (SMB1Header.Length + 3 + ReadAndXResponse.ParametersLength);
+                return (uint)ClientMaxBufferSize - (SMB1Header.Length + 3 + ReadAndXResponse.ParametersLength);
             }
         }
 
@@ -613,7 +678,8 @@ namespace SMBLibrary.Client
         {
             try
             {
-                socket.Send(packet.GetBytes());
+                byte[] packetBytes = packet.GetBytes();
+                socket.Send(packetBytes);
             }
             catch (SocketException)
             {
