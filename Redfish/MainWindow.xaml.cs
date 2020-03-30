@@ -171,7 +171,8 @@ namespace Redfish
 
                 try
                 {
-                    m_server.Start(serverAddress, port);
+                    SMBServer.DirectTCPPort = port;
+                    m_server.Start(serverAddress, transportType);
                     if (transportType == SMBTransportType.NetBiosOverTCP)
                     {
                         if (serverAddress.AddressFamily == AddressFamily.InterNetwork && !IPAddress.Equals(serverAddress, IPAddress.Any))
