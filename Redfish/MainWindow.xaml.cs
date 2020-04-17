@@ -50,6 +50,8 @@ namespace Redfish
         {
             List<IPAddress> localIPs = NetworkInterfaceHelper.GetHostIPAddresses();
             KeyValuePairList<string, IPAddress> list = new KeyValuePairList<string, IPAddress>();
+
+            list.Add("Any", IPAddress.Any);
             foreach (IPAddress address in localIPs)
             {
                 if (address.ToString().Equals("127.0.0.1"))
@@ -58,7 +60,7 @@ namespace Redfish
                 }
                 list.Add(address.ToString(), address);
             }
-            list.Add("Any", IPAddress.Any);
+            
             this.address_combobox.ItemsSource = list;
             this.address_combobox.DisplayMemberPath = "Key";
             this.address_combobox.SelectedIndex = 0;
