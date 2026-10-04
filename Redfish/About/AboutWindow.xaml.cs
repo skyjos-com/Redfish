@@ -22,6 +22,7 @@ namespace Redfish.About
         public AboutWindow()
         {
             InitializeComponent();
+            version_label.Content = "Version " + typeof(AboutWindow).Assembly.GetName().Version;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

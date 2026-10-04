@@ -29,6 +29,7 @@ namespace Redfish
         private SMBLibrary.Server.NameServer m_nameServer;
         private LogWriter m_logWriter;
         private List<ShareSettings> m_sharesSettings;
+        private bool m_standaloneRunning;
 
         public MainWindow()
         {
@@ -74,12 +75,41 @@ namespace Redfish
             int port = SettingsHelper.ReadServerPort();
             this.port_textbox.Text = port.ToString();
 
-            bool shouldRunAsService = SettingsHelper.ReadRunAsService();
-            this.service_checkbox.IsChecked = shouldRunAsService;
+            RefreshServiceState();
         }
 
+        private void RefreshServiceState()
+        {
+            // Do not overwrite controls while elevated service setup is in progress.
+            if (!this.service_checkbox.IsEnabled)
+                return;
 
-        private void StartButton_Click(object sender, RoutedEventArgs e)
+            try
+            {
+                var status = WindowsServiceManager.GetStatus();
+                this.service_checkbox.IsChecked = status.HasValue;
+                if (status.HasValue)
+                {
+                    this.start_button.IsEnabled = status.Value == ServiceControllerStatus.Stopped;
+                    this.stop_button.IsEnabled = status.Value == ServiceControllerStatus.Running ||
+                        status.Value == ServiceControllerStatus.Paused;
+                }
+                else
+                {
+                    this.start_button.IsEnabled = !m_standaloneRunning;
+                    this.stop_button.IsEnabled = m_standaloneRunning;
+                }
+            }
+            catch (Exception ex) when (ex is InvalidOperationException || ex is System.ComponentModel.Win32Exception)
+            {
+                // An unreadable service state must not be treated as stopped or absent.
+                this.start_button.IsEnabled = false;
+                this.stop_button.IsEnabled = false;
+                Debug.WriteLine(ex);
+            }
+        }
+
+        private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
             string accountName = this.username_textbox.Text;
             string password = this.password_box.Password;
@@ -130,13 +160,20 @@ namespace Redfish
                     using (var serviceController = new ServiceController(WindowsServiceManager.ServiceName))
                     {
                         serviceController.Start();
+                        this.start_button.IsEnabled = false;
+                        this.stop_button.IsEnabled = false;
+                        await Task.Run(() => serviceController.WaitForStatus(
+                            ServiceControllerStatus.Running, TimeSpan.FromSeconds(30)));
                     }
-                    this.start_button.IsEnabled = false;
-                    this.stop_button.IsEnabled = true;
+                    RefreshServiceState();
                 } 
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Error");
+                }
+                finally
+                {
+                    RefreshServiceState();
                 }
                 
             }
@@ -165,6 +202,7 @@ namespace Redfish
                 try
                 {
                     m_server.Start(serverAddress, transportType, port);
+                    m_standaloneRunning = true;
                     if (transportType == SMBTransportType.NetBiosOverTCP)
                     {
                         if (serverAddress.AddressFamily == AddressFamily.InterNetwork && !IPAddress.Equals(serverAddress, IPAddress.Any))
@@ -186,7 +224,7 @@ namespace Redfish
 
         }
 
-        private void StopButton_Click(object sender, RoutedEventArgs e)
+        private async void StopButton_Click(object sender, RoutedEventArgs e)
         {
             bool runAsService = this.service_checkbox.IsChecked ?? false;
             if (runAsService)
@@ -204,8 +242,10 @@ namespace Redfish
                         if (serviceController.CanStop)
                         {
                             serviceController.Stop();
-                            this.start_button.IsEnabled = true;
+                            this.start_button.IsEnabled = false;
                             this.stop_button.IsEnabled = false;
+                            await Task.Run(() => serviceController.WaitForStatus(
+                                ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(30)));
                         }
                     }
                 }
@@ -213,12 +253,17 @@ namespace Redfish
                 {
                     MessageBox.Show(ex.Message, "Error");
                 }
+                finally
+                {
+                    RefreshServiceState();
+                }
             }
             else
             {
                 if (m_server != null)
                 {
                     m_server.Stop();
+                    m_standaloneRunning = false;
                     m_logWriter.CloseLogFile();
                     this.start_button.IsEnabled = true;
                     this.stop_button.IsEnabled = false;
@@ -315,6 +360,7 @@ namespace Redfish
                 this.service_checkbox.IsEnabled = true;
                 this.start_button.IsEnabled = startEnabled;
                 this.stop_button.IsEnabled = stopEnabled;
+                RefreshServiceState();
             }
         }
 

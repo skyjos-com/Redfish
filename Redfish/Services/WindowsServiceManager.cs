@@ -21,6 +21,24 @@ namespace Redfish
         private const uint ServiceNoChange = 0xFFFFFFFF;
         private const int ErrorServiceDoesNotExist = 1060;
 
+        internal static ServiceControllerStatus? GetStatus()
+        {
+            using (var controller = new ServiceController(ServiceName))
+            {
+                try
+                {
+                    return controller.Status;
+                }
+                catch (InvalidOperationException ex)
+                {
+                    var error = ex.InnerException as Win32Exception;
+                    if (error != null && error.NativeErrorCode == ErrorServiceDoesNotExist)
+                        return null;
+                    throw;
+                }
+            }
+        }
+
         internal static void Install()
         {
             // Provision settings as the installer user, before LocalSystem first starts the service.
