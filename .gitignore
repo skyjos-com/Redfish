@@ -232,3 +232,6 @@ $RECYCLE.BIN/
 
 .vs/
 obj/
+
+# Compiled Inno Setup packages
+/installer/output/

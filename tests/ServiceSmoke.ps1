@@ -17,6 +17,23 @@ $arguments[0] = [string[]] @('--unknown-command')
 if ($assembly.EntryPoint.Invoke($null, $arguments) -ne 2) {
     throw 'Unknown arguments should exit without opening the UI.'
 }
+$programType = $assembly.GetType('Redfish.Program', $true)
+$commandCheck = $programType.GetMethod('IsServiceCommand', [Reflection.BindingFlags] 'NonPublic,Static')
+foreach ($command in @('--install-service', '--uninstall-service', '--start-service', '--stop-service')) {
+    $commandArguments = [object[]]::new(1)
+    $commandArguments[0] = [string] $command
+    if (!$commandCheck.Invoke($null, $commandArguments)) {
+        throw "The installer command $command is not recognized."
+    }
+}
+$arguments[0] = [string[]] @('--unknown-command', '--quiet')
+if ($assembly.EntryPoint.Invoke($null, $arguments) -ne 2) {
+    throw 'Quiet mode should still reject unknown commands without opening the UI.'
+}
+$arguments[0] = [string[]] @('--install-service', '--unknown-option')
+if ($assembly.EntryPoint.Invoke($null, $arguments) -ne 2) {
+    throw 'Unexpected options must not execute a service operation.'
+}
 
 $service = [Activator]::CreateInstance($assembly.GetType('Redfish.RedfishService', $true))
 try {

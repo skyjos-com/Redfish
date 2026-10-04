@@ -18,6 +18,12 @@ an administrator must explicitly grant that account access to this directory.
 | `Redfish.exe --service` | Runs under the Windows Service Control Manager without creating the WPF application. |
 | `Redfish.exe --install-service` | Registers or updates `RedfishService` and its inbound TCP firewall rule. Requires administrator rights. |
 | `Redfish.exe --uninstall-service` | Stops and removes `RedfishService` and removes its firewall rule. Requires administrator rights. |
+| `Redfish.exe --start-service` | Starts the registered service and waits for it to run. Requires service-control permissions. |
+| `Redfish.exe --stop-service` | Stops the registered service, waiting for completion; succeeds if it is absent. Requires service-control permissions. |
+
+Append `--quiet` to service-management commands to suppress dialogs. Failures are written to
+standard error and return exit code 1; invalid arguments return exit code 2. The Inno Setup
+installer captures this output in its log. See `installer/README.md` for packaging instructions.
 
 The **Run as Service** checkbox launches the registration operation with a UAC elevation prompt,
 waits for it to finish, and saves the setting after success. Checking installs the service;

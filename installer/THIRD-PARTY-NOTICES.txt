@@ -1,0 +1,12 @@
+Redfish includes the following third-party libraries as separate, replaceable DLL files:
+
+SMBLibrary 1.5.8.1
+SMBLibrary.Win32 1.5.8
+Copyright (c) Tal Aloni 2014-2026
+License: GNU Lesser General Public License version 3 or later (LGPL-3.0-or-later)
+Project and source code: https://github.com/TalAloni/SMBLibrary
+Package sources:
+https://www.nuget.org/packages/SMBLibrary/1.5.8.1
+https://www.nuget.org/packages/SMBLibrary.Win32/1.5.8
+
+Copies of the GNU LGPL version 3 and GNU GPL version 3 are included in the licenses directory.

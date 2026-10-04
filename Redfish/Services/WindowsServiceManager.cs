@@ -70,6 +70,44 @@ namespace Redfish
             }
         }
 
+        internal static void Start()
+        {
+            using (var controller = new ServiceController(ServiceName))
+            {
+                if (controller.Status == ServiceControllerStatus.StopPending)
+                    controller.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(30));
+                if (controller.Status == ServiceControllerStatus.Stopped)
+                    controller.Start();
+                controller.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(30));
+            }
+        }
+
+        internal static void Stop()
+        {
+            using (var manager = OpenSCManager(null, null, ScManagerConnect))
+            {
+                CheckHandle(manager);
+                using (var service = OpenService(manager, ServiceName, 4)) // Query status
+                {
+                    if (service.IsInvalid)
+                    {
+                        int error = Marshal.GetLastWin32Error();
+                        if (error == ErrorServiceDoesNotExist)
+                            return;
+                        throw new Win32Exception(error);
+                    }
+                }
+            }
+            using (var controller = new ServiceController(ServiceName))
+            {
+                if (controller.Status == ServiceControllerStatus.Stopped)
+                    return;
+                if (controller.Status != ServiceControllerStatus.StopPending)
+                    controller.Stop();
+                controller.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(30));
+            }
+        }
+
         internal static void Uninstall()
         {
             using (var manager = OpenSCManager(null, null, ScManagerConnect))
