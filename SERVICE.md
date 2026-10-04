@@ -1,7 +1,16 @@
 # Running Redfish
 
 The solution builds one executable, `Redfish.exe`, plus its SMBLibrary dependencies.
-Both foreground hosting and the Windows service use the same `Settings.xml` beside the executable.
+Both foreground hosting and the Windows service use `%ProgramData%\Redfish\Settings.xml`.
+The file is initialized with empty settings when missing. Files beside the executable are left untouched;
+settings from older versions are not migrated.
+
+New settings directories grant Modify access to the user creating them and Full Control to
+LocalSystem and Windows administrators, with those permissions inherited by the settings file.
+Service installation initializes settings before starting the service, so the installer user can
+also edit settings from the UI without elevation. Existing directory permissions are preserved.
+If a different Windows user will manage Redfish, or the service runs under a custom account,
+an administrator must explicitly grant that account access to this directory.
 
 | Command | Behavior |
 | --- | --- |
@@ -21,8 +30,8 @@ Registration does not start the service. Keep the executable and its dependencie
 
 To migrate an existing installation that points to `RedfishService.exe`, stop the service,
 run `Redfish.exe --install-service` as administrator, and then start it again. The service name stays
-`RedfishService`; the registered executable path and firewall rule are updated. Existing settings
-continue to work when the new executable is deployed in the same directory.
+`RedfishService`; the registered executable path and firewall rule are updated. Configure this version
+using the new settings file; the older version's settings remain beside its executable.
 
 Service installation and firewall updates are separate Windows operations. A failed initial installation
 attempt removes the newly created service. An update failure may leave an existing service partly updated;
@@ -33,6 +42,8 @@ Build with Visual Studio MSBuild (the WPF project targets .NET Framework 4.8):
 ```powershell
 MSBuild.exe Redfish.sln /t:Build /p:Configuration=Debug
 powershell.exe -NoProfile -File tests\ServiceSmoke.ps1
+powershell.exe -NoProfile -File tests\SettingsSmoke.ps1
 ```
 
-The smoke check does not install, remove, start, or stop any Windows service or modify firewall rules.
+The smoke checks do not install, remove, start, or stop any Windows service or modify firewall rules.
+The settings check creates an isolated temporary directory and leaves real settings untouched.

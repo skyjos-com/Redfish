@@ -23,6 +23,8 @@ namespace Redfish
 
         internal static void Install()
         {
+            // Provision settings as the installer user, before LocalSystem first starts the service.
+            SettingsHelper.InitializeSettings();
             string executablePath = Assembly.GetExecutingAssembly().Location;
             string command = "\"" + executablePath + "\" --service";
             using (var manager = OpenSCManager(null, null, ScManagerConnect | ScManagerCreateService))

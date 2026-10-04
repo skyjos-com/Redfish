@@ -7,6 +7,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using System.Xml;
 
@@ -256,17 +258,59 @@ namespace Redfish
 
         private static string GetSettingsFilePath()
         {
-            string appFolderPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string filePath = appFolderPath + "\\" + SettingsFileName;
-            if (!File.Exists(filePath))
+            string settingsDirectory = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Redfish");
+            return InitializeSettingsFile(settingsDirectory);
+        }
+
+        internal static void InitializeSettings()
+        {
+            GetSettingsFilePath();
+        }
+
+        private static string InitializeSettingsFile(string settingsDirectory)
+        {
+            // Settings contain credentials. Protect new directories before writing any files.
+            var security = new DirectorySecurity();
+            security.SetAccessRuleProtection(true, false);
+            var inheritance = InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit;
+            security.AddAccessRule(new FileSystemAccessRule(
+                new SecurityIdentifier(WellKnownSidType.LocalSystemSid, null),
+                FileSystemRights.FullControl, inheritance, PropagationFlags.None, AccessControlType.Allow));
+            security.AddAccessRule(new FileSystemAccessRule(
+                new SecurityIdentifier(WellKnownSidType.BuiltinAdministratorsSid, null),
+                FileSystemRights.FullControl, inheritance, PropagationFlags.None, AccessControlType.Allow));
+            using (var identity = WindowsIdentity.GetCurrent())
             {
-                StringBuilder sb = new StringBuilder();
-                sb.Append("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
-                sb.Append(Environment.NewLine);
-                sb.Append("<Settings/>");
-                File.WriteAllText(filePath, sb.ToString());
+                security.AddAccessRule(new FileSystemAccessRule(identity.User,
+                    FileSystemRights.Modify, inheritance, PropagationFlags.None, AccessControlType.Allow));
             }
-            
+
+            Directory.CreateDirectory(settingsDirectory, security);
+            string filePath = Path.Combine(settingsDirectory, SettingsFileName);
+            if (File.Exists(filePath))
+                return filePath;
+
+            // Publish a complete file; another process may initialize settings at the same time.
+            string temporaryPath = Path.Combine(settingsDirectory, Guid.NewGuid().ToString("N") + ".tmp");
+            try
+            {
+                File.WriteAllText(temporaryPath, "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" +
+                    Environment.NewLine + "<Settings/>");
+                try
+                {
+                    File.Move(temporaryPath, filePath);
+                }
+                catch (IOException) when (File.Exists(filePath))
+                {
+                    // Keep the file already published by the other process.
+                }
+            }
+            finally
+            {
+                if (File.Exists(temporaryPath))
+                    File.Delete(temporaryPath);
+            }
             return filePath;
         }
     }
