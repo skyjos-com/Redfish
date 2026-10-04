@@ -10,7 +10,7 @@ using System.Reflection;
 using System.IO;
 using Utilities;
 
-namespace RedfishService
+namespace Redfish
 {
     public class LogWriter
     {

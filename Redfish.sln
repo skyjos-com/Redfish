@@ -1,14 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.8.12009.203 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Redfish", "Redfish\Redfish.csproj", "{EDC21400-7A17-4449-9148-10EB7F03A579}"
-	ProjectSection(ProjectDependencies) = postProject
-		{38A12EE3-C270-442C-B53E-D84D65F50719} = {38A12EE3-C270-442C-B53E-D84D65F50719}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedfishService", "RedfishService\RedfishService.csproj", "{38A12EE3-C270-442C-B53E-D84D65F50719}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +15,6 @@ Global
 		{EDC21400-7A17-4449-9148-10EB7F03A579}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDC21400-7A17-4449-9148-10EB7F03A579}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDC21400-7A17-4449-9148-10EB7F03A579}.Release|Any CPU.Build.0 = Release|Any CPU
-		{38A12EE3-C270-442C-B53E-D84D65F50719}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{38A12EE3-C270-442C-B53E-D84D65F50719}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{38A12EE3-C270-442C-B53E-D84D65F50719}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{38A12EE3-C270-442C-B53E-D84D65F50719}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

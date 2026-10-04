@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +19,7 @@ using System.Diagnostics;
 using System.Security.Principal;
 using System.ServiceProcess;
 using Redfish.About;
-using RedfishService;
+using System.Threading.Tasks;
 
 namespace Redfish
 {
@@ -127,8 +127,10 @@ namespace Redfish
 
                 try
                 {
-                    ServiceController serviceController = new ServiceController("RedfishService");
-                    serviceController.Start();
+                    using (var serviceController = new ServiceController(WindowsServiceManager.ServiceName))
+                    {
+                        serviceController.Start();
+                    }
                     this.start_button.IsEnabled = false;
                     this.stop_button.IsEnabled = true;
                 } 
@@ -197,12 +199,14 @@ namespace Redfish
 
                 try
                 {
-                    ServiceController serviceController = new ServiceController("RedfishService");
-                    if (serviceController.CanStop)
+                    using (var serviceController = new ServiceController(WindowsServiceManager.ServiceName))
                     {
-                        serviceController.Stop();
-                        this.start_button.IsEnabled = true;
-                        this.stop_button.IsEnabled = false;
+                        if (serviceController.CanStop)
+                        {
+                            serviceController.Stop();
+                            this.start_button.IsEnabled = true;
+                            this.stop_button.IsEnabled = false;
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -267,34 +271,50 @@ namespace Redfish
             SettingsHelper.WriteSharesSettings(this.m_sharesSettings);
         }
 
-        private void ServiceCheckbox_Click(object sender, RoutedEventArgs e)
+        private async void ServiceCheckbox_Click(object sender, RoutedEventArgs e)
         {
-            if (this.IsInAdminRole())
+            bool runAsService = this.service_checkbox.IsChecked ?? false;
+            bool previousSetting = !runAsService;
+            bool startEnabled = this.start_button.IsEnabled;
+            bool stopEnabled = this.stop_button.IsEnabled;
+            this.service_checkbox.IsEnabled = false;
+            this.start_button.IsEnabled = false;
+            this.stop_button.IsEnabled = false;
+            try
             {
-                string fileName;
-                bool runAsService = this.service_checkbox.IsChecked ?? false;
-                if (runAsService)
+                var startInfo = new ProcessStartInfo
                 {
-                    fileName = "InstallService.bat"; 
-                } 
-                else
+                    FileName = System.Reflection.Assembly.GetExecutingAssembly().Location,
+                    Arguments = runAsService ? "--install-service" : "--uninstall-service",
+                    UseShellExecute = true,
+                    Verb = "runas",
+                    WindowStyle = ProcessWindowStyle.Hidden
+                };
+                using (var process = Process.Start(startInfo))
                 {
-                    fileName = "UninstallService.bat";
+                    if (process == null)
+                        throw new InvalidOperationException("Could not start the service setup operation.");
+                    await Task.Run(() => process.WaitForExit());
+                    if (process.ExitCode != 0)
+                        throw new InvalidOperationException("Service setup failed. The previous setting has been retained.");
                 }
-
-                Process process = new Process();
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.FileName = fileName;
-                process.StartInfo.CreateNoWindow = true;
-                process.Start();
-
                 SettingsHelper.WriteRunAsService(runAsService);
+                if (!runAsService)
+                {
+                    startEnabled = true;
+                    stopEnabled = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                bool shouldRunAsService = SettingsHelper.ReadRunAsService();
-                this.service_checkbox.IsChecked = shouldRunAsService;
-                MessageBox.Show("To start the service, please run application as administrator.", "Info");
+                this.service_checkbox.IsChecked = previousSetting;
+                MessageBox.Show(ex.Message, "Redfish service");
+            }
+            finally
+            {
+                this.service_checkbox.IsEnabled = true;
+                this.start_button.IsEnabled = startEnabled;
+                this.stop_button.IsEnabled = stopEnabled;
             }
         }
 

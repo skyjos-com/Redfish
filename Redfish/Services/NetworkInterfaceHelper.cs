@@ -11,7 +11,7 @@ using System.Net.Sockets;
 using System.Net.NetworkInformation;
 using Utilities;
 
-namespace RedfishService
+namespace Redfish
 {
     public class NetworkInterfaceHelper
     {

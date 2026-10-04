@@ -10,7 +10,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 
-namespace RedfishService
+namespace Redfish
 {
     public class SettingsHelper
     {

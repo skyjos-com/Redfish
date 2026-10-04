@@ -7,7 +7,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace RedfishService
+namespace Redfish
 {
     public class UserCollection : List<User>
     {

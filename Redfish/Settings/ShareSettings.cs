@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace RedfishService
+namespace Redfish
 {
     public class ShareSettings
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,7 +16,7 @@ using SMBLibrary.Win32;
 using SMBLibrary.Win32.Security;
 using Utilities;
 
-namespace RedfishService
+namespace Redfish
 {
     public partial class RedfishService : ServiceBase
     {
@@ -56,7 +56,7 @@ namespace RedfishService
             catch
             {
                 m_logWriter.WriteLine("Fail to load Settings.xml");
-                return;
+                throw;
             }
 
             NTLMAuthenticationProviderBase authenticationMechanism = new IndependentNTLMAuthenticationProvider(users.GetUserPassword);
@@ -90,6 +90,9 @@ namespace RedfishService
             catch (Exception ex)
             {
                 m_logWriter.WriteLine(ex.Message);
+                m_server.Stop();
+                m_logWriter.CloseLogFile();
+                throw;
             }
         }
 
