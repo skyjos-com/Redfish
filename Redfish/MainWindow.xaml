@@ -4,47 +4,54 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Redfish"
+        xmlns:loc="clr-namespace:Redfish.Localization"
         mc:Ignorable="d"
-        Title="Redfish" Height="350" Width="600" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+        Title="Redfish" Height="350" Width="650" Language="{Binding XmlLanguage, Source={x:Static loc:Localization.Current}}" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
     <Grid Margin="0,0,0,0">
         <StackPanel Margin="20,40,0,0" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="2">
             <StackPanel Orientation="Horizontal" Height="25">
-                <Label Content="Address" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Right" Width="100"/>
+                <Label Content="{Binding [Address], Source={x:Static loc:Localization.Current}}" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Right" Width="100"/>
                 <ComboBox x:Name="address_combobox" HorizontalAlignment="Left" Width="120" RenderTransformOrigin="0.5,0.5" Margin="10,0,0,0" VerticalAlignment="Top"/>
             </StackPanel>
             <StackPanel Margin="0,15,15,0" Orientation="Horizontal" Height="25">
-                <Label Content="Port" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.991,-0.618" HorizontalContentAlignment="Right" Width="100"/>
+                <Label Content="{Binding [Port], Source={x:Static loc:Localization.Current}}" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.991,-0.618" HorizontalContentAlignment="Right" Width="100"/>
                 <TextBox x:Name="port_textbox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="20445" VerticalAlignment="Top" Width="50" Margin="10,0,0,0" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="InputNumbers"/>
             </StackPanel>
             <StackPanel Margin="0,15,15,0" Orientation="Horizontal" Height="25">
-                <Label Content="User Name" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.991,-0.618" HorizontalContentAlignment="Right" Width="100"/>
+                <Label Content="{Binding [UserName], Source={x:Static loc:Localization.Current}}" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.991,-0.618" HorizontalContentAlignment="Right" Width="100"/>
                 <TextBox x:Name="username_textbox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Redfish" VerticalAlignment="Top" Width="120" Margin="10,0,0,0"/>
             </StackPanel>
             <StackPanel Margin="0,15,15,0" Orientation="Horizontal" Height="25">
-                <Label Content="Password" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.991,-0.618" HorizontalContentAlignment="Right" Width="100"/>
+                <Label Content="{Binding [Password], Source={x:Static loc:Localization.Current}}" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.991,-0.618" HorizontalContentAlignment="Right" Width="100"/>
                 <PasswordBox x:Name="password_box" HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Width="120" Margin="10,0,0,0"/>
             </StackPanel>
             <StackPanel Margin="0,15,15,0" Orientation="Horizontal" Height="17">
-                <CheckBox x:Name="service_checkbox" Content="Run as Service" Margin="110,0,0,0" Click="ServiceCheckbox_Click"/>
+                <CheckBox x:Name="service_checkbox" Content="{Binding [RunAsService], Source={x:Static loc:Localization.Current}}" Margin="110,0,0,0" Click="ServiceCheckbox_Click"/>
             </StackPanel>
         </StackPanel>
         <StackPanel Margin="0,40,30,0" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="1">
             <StackPanel Orientation="Horizontal" Height="114" HorizontalAlignment="Right">
-                <Label Content="Shares" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <Label Content="{Binding [Shares], Source={x:Static loc:Localization.Current}}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <ListBox x:Name="shares_listbox" HorizontalAlignment="Left" Height="114" VerticalAlignment="Top" Width="223"/>
             </StackPanel>
             <StackPanel Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Add" HorizontalAlignment="Left" Width="75" VerticalAlignment="Top" Click="AddShareButton_Click"/>
-                <Button Content="Remove" HorizontalAlignment="Left" Width="75" VerticalAlignment="Top" Margin="5,0,0,0" Click="RemoveShareButton_Click"/>
+                <Button Content="{Binding [Add], Source={x:Static loc:Localization.Current}}" HorizontalAlignment="Left" Width="75" VerticalAlignment="Top" Click="AddShareButton_Click"/>
+                <Button Content="{Binding [Remove], Source={x:Static loc:Localization.Current}}" HorizontalAlignment="Left" Width="75" VerticalAlignment="Top" Margin="5,0,0,0" Click="RemoveShareButton_Click"/>
             </StackPanel>
 
         </StackPanel>
         <StackPanel Margin="0,0,0,50" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="1">
-            <Button x:Name="start_button" Content="Start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="StartButton_Click"/>
-            <Button x:Name="stop_button" Content="Stop" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Top" Width="75" Click="StopButton_Click"/>
+            <Button x:Name="start_button" Content="{Binding [Start], Source={x:Static loc:Localization.Current}}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="StartButton_Click"/>
+            <Button x:Name="stop_button" Content="{Binding [Stop], Source={x:Static loc:Localization.Current}}" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Top" Width="75" Click="StopButton_Click"/>
         </StackPanel>
-        <Button Margin="0,0,25,48" VerticalAlignment="Bottom" Width="26" Height="26" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Right" Click="AboutButton_click">
-            <Image Source="Resources/about_button.png" />
+        <ComboBox x:Name="language_combobox" Width="125" Margin="0,0,25,50" HorizontalAlignment="Right" VerticalAlignment="Bottom" SelectedValuePath="Tag" SelectionChanged="LanguageComboBox_SelectionChanged" AutomationProperties.Name="{Binding [Language], Source={x:Static loc:Localization.Current}}">
+            <ComboBoxItem Tag="en" Content="English"/>
+            <ComboBoxItem Tag="zh-Hans" Content="简体中文"/>
+            <ComboBoxItem Tag="ja" Content="日本語"/>
+            <ComboBoxItem Tag="de" Content="Deutsch"/>
+        </ComboBox>
+        <Button Margin="0,0,25,15" VerticalAlignment="Bottom" Width="26" Height="26" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Right" Click="AboutButton_click" ToolTip="{Binding [About], Source={x:Static loc:Localization.Current}}" AutomationProperties.Name="{Binding [About], Source={x:Static loc:Localization.Current}}">
+            <Image Source="Resources/about_button.png" RenderTransformOrigin="0.563,1.853" />
         </Button>
     </Grid>
 </Window>

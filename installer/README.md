@@ -31,6 +31,8 @@ Build-directory and version overrides are available:
 
 Keep the script's `AppId` unchanged between releases so Inno recognizes upgrades.
 The package contains the executable, its configuration, both SMBLibrary DLLs, and library notices.
+It also includes `Redfish.resources.dll` in the `zh-Hans`, `ja`, and `de` folders for the
+application's Simplified Chinese, Japanese, and German interfaces.
 It excludes settings, logs, debug symbols, and the old `RedfishService.exe`.
 
 ## Install and upgrade behavior

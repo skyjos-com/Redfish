@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Address" xml:space="preserve"><value>Address</value></data>
+  <data name="Port" xml:space="preserve"><value>Port</value></data>
+  <data name="UserName" xml:space="preserve"><value>User Name</value></data>
+  <data name="Password" xml:space="preserve"><value>Password</value></data>
+  <data name="RunAsService" xml:space="preserve"><value>Run as Service</value></data>
+  <data name="Shares" xml:space="preserve"><value>Shares</value></data>
+  <data name="Add" xml:space="preserve"><value>Add</value></data>
+  <data name="Remove" xml:space="preserve"><value>Remove</value></data>
+  <data name="Start" xml:space="preserve"><value>Start</value></data>
+  <data name="Stop" xml:space="preserve"><value>Stop</value></data>
+  <data name="Language" xml:space="preserve"><value>Language</value></data>
+  <data name="AnyAddress" xml:space="preserve"><value>Any</value></data>
+  <data name="About" xml:space="preserve"><value>About</value></data>
+  <data name="ProductName" xml:space="preserve"><value>Redfish SMB Server</value></data>
+  <data name="Version" xml:space="preserve"><value>Version {0}</value></data>
+  <data name="Copyright" xml:space="preserve"><value>Copyright (c) Skyjos and Authors</value></data>
+  <data name="GitHubLink" xml:space="preserve"><value>Redfish on GitHub</value></data>
+  <data name="Description" xml:space="preserve"><value>Redfish is a simple and flexible SMB server for Windows, maintained by the Skyjos team and open source on GitHub.</value></data>
+  <data name="Error" xml:space="preserve"><value>Error</value></data>
+  <data name="Info" xml:space="preserve"><value>Information</value></data>
+  <data name="ServiceTitle" xml:space="preserve"><value>Redfish service</value></data>
+  <data name="UserNameRequired" xml:space="preserve"><value>User name cannot be empty.</value></data>
+  <data name="SharesRequired" xml:space="preserve"><value>Please add a folder to share.</value></data>
+  <data name="InvalidPort" xml:space="preserve"><value>Enter a port number between 1 and 65535.</value></data>
+  <data name="StartServiceAsAdmin" xml:space="preserve"><value>Run Redfish as administrator to start the service.</value></data>
+  <data name="StopServiceAsAdmin" xml:space="preserve"><value>Run Redfish as administrator to stop the service.</value></data>
+  <data name="StartServiceFailed" xml:space="preserve"><value>Could not start the service.
+
+{0}</value></data>
+  <data name="StopServiceFailed" xml:space="preserve"><value>Could not stop the service.
+
+{0}</value></data>
+  <data name="StartServerFailed" xml:space="preserve"><value>Could not start the server.
+
+{0}</value></data>
+  <data name="SelectShareFolder" xml:space="preserve"><value>Select a folder to share.</value></data>
+  <data name="ServiceSetupStartFailed" xml:space="preserve"><value>Could not start the service setup operation.</value></data>
+  <data name="ServiceSetupFailed" xml:space="preserve"><value>Service setup failed. The previous setting has been retained.</value></data>
+  <data name="ServiceOperationFailed" xml:space="preserve"><value>The service operation failed.
+
+{0}</value></data>
+  <data name="LanguageSaveFailed" xml:space="preserve"><value>Could not save the language preference.
+
+{0}</value></data>
+</root>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Address" xml:space="preserve"><value>Adresse</value></data>
+  <data name="Port" xml:space="preserve"><value>Port</value></data>
+  <data name="UserName" xml:space="preserve"><value>Benutzername</value></data>
+  <data name="Password" xml:space="preserve"><value>Passwort</value></data>
+  <data name="RunAsService" xml:space="preserve"><value>Als Dienst ausführen</value></data>
+  <data name="Shares" xml:space="preserve"><value>Freigaben</value></data>
+  <data name="Add" xml:space="preserve"><value>Hinzufügen</value></data>
+  <data name="Remove" xml:space="preserve"><value>Entfernen</value></data>
+  <data name="Start" xml:space="preserve"><value>Starten</value></data>
+  <data name="Stop" xml:space="preserve"><value>Stoppen</value></data>
+  <data name="Language" xml:space="preserve"><value>Sprache</value></data>
+  <data name="AnyAddress" xml:space="preserve"><value>Alle</value></data>
+  <data name="About" xml:space="preserve"><value>Über Redfish</value></data>
+  <data name="ProductName" xml:space="preserve"><value>Redfish SMB-Server</value></data>
+  <data name="Version" xml:space="preserve"><value>Version {0}</value></data>
+  <data name="Copyright" xml:space="preserve"><value>Copyright (c) Skyjos und Mitwirkende</value></data>
+  <data name="GitHubLink" xml:space="preserve"><value>Redfish auf GitHub</value></data>
+  <data name="Description" xml:space="preserve"><value>Redfish ist ein einfacher und flexibler SMB-Server für Windows. Er wird vom Skyjos-Team gepflegt und ist auf GitHub als Open Source verfügbar.</value></data>
+  <data name="Error" xml:space="preserve"><value>Fehler</value></data>
+  <data name="Info" xml:space="preserve"><value>Information</value></data>
+  <data name="ServiceTitle" xml:space="preserve"><value>Redfish-Dienst</value></data>
+  <data name="UserNameRequired" xml:space="preserve"><value>Der Benutzername darf nicht leer sein.</value></data>
+  <data name="SharesRequired" xml:space="preserve"><value>Bitte fügen Sie einen Ordner zur Freigabe hinzu.</value></data>
+  <data name="InvalidPort" xml:space="preserve"><value>Geben Sie eine Portnummer zwischen 1 und 65535 ein.</value></data>
+  <data name="StartServiceAsAdmin" xml:space="preserve"><value>Führen Sie Redfish als Administrator aus, um den Dienst zu starten.</value></data>
+  <data name="StopServiceAsAdmin" xml:space="preserve"><value>Führen Sie Redfish als Administrator aus, um den Dienst zu stoppen.</value></data>
+  <data name="StartServiceFailed" xml:space="preserve"><value>Der Dienst konnte nicht gestartet werden.
+
+{0}</value></data>
+  <data name="StopServiceFailed" xml:space="preserve"><value>Der Dienst konnte nicht gestoppt werden.
+
+{0}</value></data>
+  <data name="StartServerFailed" xml:space="preserve"><value>Der Server konnte nicht gestartet werden.
+
+{0}</value></data>
+  <data name="SelectShareFolder" xml:space="preserve"><value>Wählen Sie einen Ordner zur Freigabe aus.</value></data>
+  <data name="ServiceSetupStartFailed" xml:space="preserve"><value>Die Einrichtung des Dienstes konnte nicht gestartet werden.</value></data>
+  <data name="ServiceSetupFailed" xml:space="preserve"><value>Die Einrichtung des Dienstes ist fehlgeschlagen. Die bisherige Einstellung wurde beibehalten.</value></data>
+  <data name="ServiceOperationFailed" xml:space="preserve"><value>Die Dienstoperation ist fehlgeschlagen.
+
+{0}</value></data>
+  <data name="LanguageSaveFailed" xml:space="preserve"><value>Die Spracheinstellung konnte nicht gespeichert werden.
+
+{0}</value></data>
+</root>

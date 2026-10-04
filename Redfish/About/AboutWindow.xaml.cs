@@ -22,13 +22,8 @@ namespace Redfish.About
         public AboutWindow()
         {
             InitializeComponent();
-            version_label.Content = "Version " + typeof(AboutWindow).Assembly.GetName().Version;
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            this.description_textblock.Text = "Redfish is a simple and flexible SMB server on Windows. It's maintained by Skyjos team and open source on GitHub";
-        }
 
         private void Hyperlink_Website(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {

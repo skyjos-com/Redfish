@@ -20,6 +20,7 @@ using System.Security.Principal;
 using System.ServiceProcess;
 using Redfish.About;
 using System.Threading.Tasks;
+using Strings = Redfish.Localization.Localization;
 
 namespace Redfish
 {
@@ -34,6 +35,36 @@ namespace Redfish
         public MainWindow()
         {
             InitializeComponent();
+            this.language_combobox.SelectedValue = Strings.Current.LanguageCode;
+        }
+
+        private void LanguageComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            var item = this.language_combobox.SelectedItem as System.Windows.Controls.ComboBoxItem;
+            if (item == null || (string)item.Tag == Strings.Current.LanguageCode)
+                return;
+
+            try
+            {
+                Strings.Current.SetLanguage((string)item.Tag);
+                // Preserve the selected interface and entered settings while changing its label.
+                var addresses = this.address_combobox.ItemsSource as KeyValuePairList<string, IPAddress>;
+                if (addresses != null)
+                {
+                    int selectedIndex = this.address_combobox.SelectedIndex;
+                    var translatedAddresses = new KeyValuePairList<string, IPAddress>();
+                    foreach (var address in addresses)
+                        translatedAddresses.Add(IPAddress.Equals(address.Value, IPAddress.Any)
+                            ? Strings.Current["AnyAddress"] : address.Key, address.Value);
+                    this.address_combobox.ItemsSource = translatedAddresses;
+                    this.address_combobox.SelectedIndex = selectedIndex;
+                }
+            }
+            catch (Exception ex)
+            {
+                this.language_combobox.SelectedValue = Strings.Current.LanguageCode;
+                MessageBox.Show(Strings.Current.Format("LanguageSaveFailed", ex.Message), Strings.Current["Error"]);
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -41,7 +72,7 @@ namespace Redfish
             List<IPAddress> localIPs = NetworkInterfaceHelper.GetHostIPAddresses();
             KeyValuePairList<string, IPAddress> list = new KeyValuePairList<string, IPAddress>();
 
-            list.Add("Any", IPAddress.Any);
+            list.Add(Strings.Current["AnyAddress"], IPAddress.Any);
             foreach (IPAddress address in localIPs)
             {
                 if (address.ToString().Equals("127.0.0.1"))
@@ -115,14 +146,14 @@ namespace Redfish
             string password = this.password_box.Password;
             if (CommonUtils.IsEmptyString(accountName))
             {
-                MessageBox.Show("User Name or Password cannot be empty!", "Error");
+                MessageBox.Show(Strings.Current["UserNameRequired"], Strings.Current["Error"]);
                 return;
             }
 
             List<ShareSettings> sharesSettings = this.GetShareSettings();
             if(sharesSettings == null || sharesSettings.Count == 0)
             {
-                MessageBox.Show("Please add directories for sharing!", "Error");
+                MessageBox.Show(Strings.Current["SharesRequired"], Strings.Current["Error"]);
                 return;
             }
 
@@ -134,7 +165,7 @@ namespace Redfish
             } 
             catch
             {
-                MessageBox.Show("Invalid port number!", "Error");
+                MessageBox.Show(Strings.Current["InvalidPort"], Strings.Current["Error"]);
                 return;
             }
 
@@ -151,7 +182,7 @@ namespace Redfish
             {
                 if (!this.IsInAdminRole())
                 {
-                    MessageBox.Show("To start the service, please run application as administrator.", "Info");
+                    MessageBox.Show(Strings.Current["StartServiceAsAdmin"], Strings.Current["Info"]);
                     return;
                 }
 
@@ -169,7 +200,7 @@ namespace Redfish
                 } 
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error");
+                    MessageBox.Show(Strings.Current.Format("StartServiceFailed", ex.Message), Strings.Current["Error"]);
                 }
                 finally
                 {
@@ -218,7 +249,7 @@ namespace Redfish
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error");
+                    MessageBox.Show(Strings.Current.Format("StartServerFailed", ex.Message), Strings.Current["Error"]);
                 }
             }
 
@@ -231,7 +262,7 @@ namespace Redfish
             {
                 if (!this.IsInAdminRole())
                 {
-                    MessageBox.Show("To stop the service, please run application as administrator.", "Info");
+                    MessageBox.Show(Strings.Current["StopServiceAsAdmin"], Strings.Current["Info"]);
                     return;
                 }
 
@@ -251,7 +282,7 @@ namespace Redfish
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error");
+                    MessageBox.Show(Strings.Current.Format("StopServiceFailed", ex.Message), Strings.Current["Error"]);
                 }
                 finally
                 {
@@ -280,6 +311,7 @@ namespace Redfish
         private void AddShareButton_Click(object sender, RoutedEventArgs e)
         {
             FolderBrowserDialog fbDialog = new FolderBrowserDialog();
+            fbDialog.Description = Strings.Current["SelectShareFolder"];
             DialogResult result = fbDialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
@@ -338,10 +370,10 @@ namespace Redfish
                 using (var process = Process.Start(startInfo))
                 {
                     if (process == null)
-                        throw new InvalidOperationException("Could not start the service setup operation.");
+                        throw new InvalidOperationException(Strings.Current["ServiceSetupStartFailed"]);
                     await Task.Run(() => process.WaitForExit());
                     if (process.ExitCode != 0)
-                        throw new InvalidOperationException("Service setup failed. The previous setting has been retained.");
+                        throw new InvalidOperationException(Strings.Current["ServiceSetupFailed"]);
                 }
                 SettingsHelper.WriteRunAsService(runAsService);
                 if (!runAsService)
@@ -353,7 +385,7 @@ namespace Redfish
             catch (Exception ex)
             {
                 this.service_checkbox.IsChecked = previousSetting;
-                MessageBox.Show(ex.Message, "Redfish service");
+                MessageBox.Show(Strings.Current.Format("ServiceOperationFailed", ex.Message), Strings.Current["ServiceTitle"]);
             }
             finally
             {

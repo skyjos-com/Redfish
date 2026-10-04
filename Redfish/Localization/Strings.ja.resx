@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Address" xml:space="preserve"><value>アドレス</value></data>
+  <data name="Port" xml:space="preserve"><value>ポート</value></data>
+  <data name="UserName" xml:space="preserve"><value>ユーザー名</value></data>
+  <data name="Password" xml:space="preserve"><value>パスワード</value></data>
+  <data name="RunAsService" xml:space="preserve"><value>サービスとして実行</value></data>
+  <data name="Shares" xml:space="preserve"><value>共有フォルダー</value></data>
+  <data name="Add" xml:space="preserve"><value>追加</value></data>
+  <data name="Remove" xml:space="preserve"><value>削除</value></data>
+  <data name="Start" xml:space="preserve"><value>開始</value></data>
+  <data name="Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="Language" xml:space="preserve"><value>言語</value></data>
+  <data name="AnyAddress" xml:space="preserve"><value>すべて</value></data>
+  <data name="About" xml:space="preserve"><value>バージョン情報</value></data>
+  <data name="ProductName" xml:space="preserve"><value>Redfish SMB サーバー</value></data>
+  <data name="Version" xml:space="preserve"><value>バージョン {0}</value></data>
+  <data name="Copyright" xml:space="preserve"><value>著作権 (c) Skyjos および開発者</value></data>
+  <data name="GitHubLink" xml:space="preserve"><value>GitHub の Redfish</value></data>
+  <data name="Description" xml:space="preserve"><value>Redfish は、シンプルで柔軟な Windows 用 SMB サーバーです。Skyjos チームが保守しており、GitHub でソースコードを公開しています。</value></data>
+  <data name="Error" xml:space="preserve"><value>エラー</value></data>
+  <data name="Info" xml:space="preserve"><value>情報</value></data>
+  <data name="ServiceTitle" xml:space="preserve"><value>Redfish サービス</value></data>
+  <data name="UserNameRequired" xml:space="preserve"><value>ユーザー名を入力してください。</value></data>
+  <data name="SharesRequired" xml:space="preserve"><value>共有するフォルダーを追加してください。</value></data>
+  <data name="InvalidPort" xml:space="preserve"><value>1 から 65535 までのポート番号を入力してください。</value></data>
+  <data name="StartServiceAsAdmin" xml:space="preserve"><value>サービスを開始するには、Redfish を管理者として実行してください。</value></data>
+  <data name="StopServiceAsAdmin" xml:space="preserve"><value>サービスを停止するには、Redfish を管理者として実行してください。</value></data>
+  <data name="StartServiceFailed" xml:space="preserve"><value>サービスを開始できませんでした。
+
+{0}</value></data>
+  <data name="StopServiceFailed" xml:space="preserve"><value>サービスを停止できませんでした。
+
+{0}</value></data>
+  <data name="StartServerFailed" xml:space="preserve"><value>サーバーを開始できませんでした。
+
+{0}</value></data>
+  <data name="SelectShareFolder" xml:space="preserve"><value>共有するフォルダーを選択してください。</value></data>
+  <data name="ServiceSetupStartFailed" xml:space="preserve"><value>サービスの設定処理を開始できませんでした。</value></data>
+  <data name="ServiceSetupFailed" xml:space="preserve"><value>サービスの設定に失敗しました。以前の設定は保持されています。</value></data>
+  <data name="ServiceOperationFailed" xml:space="preserve"><value>サービスの操作に失敗しました。
+
+{0}</value></data>
+  <data name="LanguageSaveFailed" xml:space="preserve"><value>言語設定を保存できませんでした。
+
+{0}</value></data>
+</root>

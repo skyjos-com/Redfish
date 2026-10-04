@@ -50,6 +50,9 @@ Name: "service"; Description: "Register the Windows service (configure and start
 ; List runtime files explicitly: do not ship old service executables, logs, settings, or debug symbols.
 Source: "{#BuildDir}\Redfish.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BuildDir}\Redfish.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BuildDir}\zh-Hans\Redfish.resources.dll"; DestDir: "{app}\zh-Hans"; Flags: ignoreversion
+Source: "{#BuildDir}\ja\Redfish.resources.dll"; DestDir: "{app}\ja"; Flags: ignoreversion
+Source: "{#BuildDir}\de\Redfish.resources.dll"; DestDir: "{app}\de"; Flags: ignoreversion
 Source: "{#BuildDir}\SMBLibrary.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BuildDir}\SMBLibrary.Win32.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "THIRD-PARTY-NOTICES.txt"; DestDir: "{app}"; Flags: ignoreversion

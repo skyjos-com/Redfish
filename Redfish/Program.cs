@@ -22,6 +22,8 @@ namespace Redfish
             bool quiet = args.Length == 2 && args[1] == "--quiet";
             if ((args.Length == 1 || quiet) && IsServiceCommand(args[0]))
             {
+                if (!quiet)
+                    Localization.Localization.Current.Initialize();
                 try
                 {
                     if (args[0] == "--install-service")
@@ -39,7 +41,8 @@ namespace Redfish
                     if (quiet)
                         Console.Error.WriteLine(ex.ToString());
                     else
-                        MessageBox.Show(ex.Message, "Redfish service", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(Localization.Localization.Current.Format("ServiceOperationFailed", ex.Message),
+                            Localization.Localization.Current["ServiceTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
                     return 1;
                 }
             }

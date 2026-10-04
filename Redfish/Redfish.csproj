@@ -63,6 +63,7 @@
       <HintPath>..\packages\SMBLibrary.Win32.1.5.8\lib\net40\SMBLibrary.Win32.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Windows.Forms" />
@@ -104,6 +105,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Localization\Localization.cs" />
+    <EmbeddedResource Include="Localization\Strings.resx" />
+    <EmbeddedResource Include="Localization\Strings.zh-Hans.resx" />
+    <EmbeddedResource Include="Localization\Strings.ja.resx" />
+    <EmbeddedResource Include="Localization\Strings.de.resx" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

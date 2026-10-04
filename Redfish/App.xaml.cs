@@ -9,5 +9,9 @@ namespace Redfish
 {
     public partial class App : Application
     {
+        public App()
+        {
+            Localization.Localization.Current.Initialize();
+        }
     }
 }

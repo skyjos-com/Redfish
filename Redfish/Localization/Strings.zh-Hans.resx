@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Address" xml:space="preserve"><value>地址</value></data>
+  <data name="Port" xml:space="preserve"><value>端口</value></data>
+  <data name="UserName" xml:space="preserve"><value>用户名</value></data>
+  <data name="Password" xml:space="preserve"><value>密码</value></data>
+  <data name="RunAsService" xml:space="preserve"><value>作为服务运行</value></data>
+  <data name="Shares" xml:space="preserve"><value>共享文件夹</value></data>
+  <data name="Add" xml:space="preserve"><value>添加</value></data>
+  <data name="Remove" xml:space="preserve"><value>移除</value></data>
+  <data name="Start" xml:space="preserve"><value>启动</value></data>
+  <data name="Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="Language" xml:space="preserve"><value>语言</value></data>
+  <data name="AnyAddress" xml:space="preserve"><value>所有地址</value></data>
+  <data name="About" xml:space="preserve"><value>关于</value></data>
+  <data name="ProductName" xml:space="preserve"><value>Redfish SMB 服务器</value></data>
+  <data name="Version" xml:space="preserve"><value>版本 {0}</value></data>
+  <data name="Copyright" xml:space="preserve"><value>版权所有 (c) Skyjos 及作者</value></data>
+  <data name="GitHubLink" xml:space="preserve"><value>GitHub 上的 Redfish</value></data>
+  <data name="Description" xml:space="preserve"><value>Redfish 是一款简单灵活的 Windows SMB 服务器，由 Skyjos 团队维护，并在 GitHub 上开源。</value></data>
+  <data name="Error" xml:space="preserve"><value>错误</value></data>
+  <data name="Info" xml:space="preserve"><value>提示</value></data>
+  <data name="ServiceTitle" xml:space="preserve"><value>Redfish 服务</value></data>
+  <data name="UserNameRequired" xml:space="preserve"><value>用户名不能为空。</value></data>
+  <data name="SharesRequired" xml:space="preserve"><value>请添加要共享的文件夹。</value></data>
+  <data name="InvalidPort" xml:space="preserve"><value>请输入 1 到 65535 之间的端口号。</value></data>
+  <data name="StartServiceAsAdmin" xml:space="preserve"><value>请以管理员身份运行 Redfish 以启动服务。</value></data>
+  <data name="StopServiceAsAdmin" xml:space="preserve"><value>请以管理员身份运行 Redfish 以停止服务。</value></data>
+  <data name="StartServiceFailed" xml:space="preserve"><value>无法启动服务。
+
+{0}</value></data>
+  <data name="StopServiceFailed" xml:space="preserve"><value>无法停止服务。
+
+{0}</value></data>
+  <data name="StartServerFailed" xml:space="preserve"><value>无法启动服务器。
+
+{0}</value></data>
+  <data name="SelectShareFolder" xml:space="preserve"><value>请选择要共享的文件夹。</value></data>
+  <data name="ServiceSetupStartFailed" xml:space="preserve"><value>无法启动服务配置操作。</value></data>
+  <data name="ServiceSetupFailed" xml:space="preserve"><value>服务配置失败。已保留之前的设置。</value></data>
+  <data name="ServiceOperationFailed" xml:space="preserve"><value>服务操作失败。
+
+{0}</value></data>
+  <data name="LanguageSaveFailed" xml:space="preserve"><value>无法保存语言设置。
+
+{0}</value></data>
+</root>
