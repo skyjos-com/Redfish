@@ -1,49 +1,35 @@
 # Redfish
 
-Redfish is a simple and flexible SMB server on Windows. It was started by [Skyjos](https://www.skyjos.com) team and open source on GitHub. Redfish gives you an alternative way to run file sharing service on Windows. It's more flexible and simpler than Windows file sharing service. You could set up share folders, user account even change the port in the application.
+Redfish is a simple, flexible SMB server for Windows. Originally developed by the [Skyjos](https://www.skyjos.com) team, it is open source and available on GitHub.
 
-## Languages
+Redfish provides an alternative to Windows file sharing, with a desktop interface for configuring shared folders, a user account, and a custom service port.
 
-The application supports English, Simplified Chinese, Japanese, and German. On first launch,
-it matches the Windows display language when supported and uses English otherwise.
-Use the **English / 简体中文 / 日本語 / Deutsch**
-selector above the info button in the lower right corner to switch immediately, including any open About windows.
-The choice is saved per Windows user, separately from server credentials and service settings.
-Windows-provided dialog buttons and system error details follow the Windows display language.
+## Screenshot
 
-Translations are in `Redfish/Localization/Strings.resx` (English fallback) and
-`Redfish/Localization/Strings.zh-Hans.resx` (Simplified Chinese),
-`Redfish/Localization/Strings.ja.resx` (Japanese), and `Redfish/Localization/Strings.de.resx`
-(German). Keep resource keys and format placeholders consistent when updating translations.
-Ship the `zh-Hans`, `ja`, and `de` folders containing `Redfish.resources.dll` alongside the
-executable; the installer includes them automatically.
+![Redfish SMB server interface](screenshot_1.PNG)
 
-Run localization checks with Windows PowerShell after building:
+## How it works
 
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -STA -File tests/LocalizationSmoke.ps1 -Configuration Debug
-```
+Redfish is written in C# and requires .NET Framework 4.8 or later. You can:
 
-## Screenshots:
-![](https://github.com/skyjos-com/Redfish/blob/master/screenshot_1.PNG)
+- Share folders using a standalone application.
+- Run file sharing in the background as a Windows service.
+- Configure shared folders, a user account, and a custom service port.
 
-## How it works:
+The interface is available in English, Simplified Chinese, Japanese, and German.
 
-Redfish is written in C# and requires .NET Framework 4 or above. It has 3 modules:
-* Redfish (Main module): Run file sharing as a standalone application. 
-* RedfishService Module: Run file sharing as a Windows service.
-* Setup Module: Packaging application into setup.mis
+Redfish has been tested on Windows 10 and Windows 11.
 
-Tested on Windows 7 and Windows 10.
+See [Running Redfish](SERVICE.md) for service configuration and command-line options, and the [installer guide](installer/README.md) for packaging instructions.
 
-### Notes:
+### Default port
 
-The 445 port is taken by Windows file sharing service, so Redfish use 20445 as default service port.
+Windows file sharing uses port 445. To avoid conflicts, Redfish uses port 20445 by default. You can change this port in the application.
 
-## 3rd-party Libraries:
+## Third-party libraries
 
-* [SMBLibrary](https://github.com/TalAloni/SMBLibrary): A SMB server library from [TalAloni](https://github.com/TalAloni).
+- [SMBLibrary](https://github.com/TalAloni/SMBLibrary) — an SMB library developed by [Tal Aloni](https://github.com/TalAloni).
 
-## Contact:
+## Contact
 
-If you have any suggestions or questions, feel free to contact us [support@skyjos.com](support@skyjos.com).
+For questions or suggestions, contact [support@skyjos.com](mailto:support@skyjos.com).
