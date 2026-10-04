@@ -14,8 +14,4 @@
     <RepositoryUrl>https://github.com/TalAloni/SMBLibrary</RepositoryUrl>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Utilities\Utilities.csproj" />
-  </ItemGroup>
-
 </Project>

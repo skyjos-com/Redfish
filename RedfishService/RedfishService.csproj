@@ -38,6 +38,12 @@
     <ApplicationIcon>fish_service.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SMBLibrary, Version=1.5.8.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SMBLibrary.1.5.8.1\lib\net40\SMBLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="SMBLibrary.Win32, Version=1.5.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SMBLibrary.Win32.1.5.8\lib\net40\SMBLibrary.Win32.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
@@ -56,6 +62,7 @@
     <Compile Include="ProjectInstaller.Designer.cs">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
+    <Compile Include="RedfishSMBserver.cs" />
     <Compile Include="RedfishService.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -88,21 +95,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SMBServer\SMBLibrary.Win32\SMBLibrary.Win32.csproj">
-      <Project>{8ce25496-a52b-4841-822f-74c469d10ee7}</Project>
-      <Name>SMBLibrary.Win32</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SMBServer\SMBLibrary\SMBLibrary.csproj">
-      <Project>{8d9e8f5d-fd13-4e4c-9723-a333da2034a7}</Project>
-      <Name>SMBLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SMBServer\Utilities\Utilities.csproj">
-      <Project>{6e0f2d1e-6167-4032-ba90-dee3a99207d0}</Project>
-      <Name>Utilities</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -21,7 +21,7 @@ namespace RedfishService
     public partial class RedfishService : ServiceBase
     {
         private LogWriter m_logWriter = new LogWriter();
-        private SMBLibrary.Server.SMBServer m_server;
+        private RedfishSMBServer m_server;
         private SMBLibrary.Server.NameServer m_nameServer;
 
         public RedfishService()
@@ -69,15 +69,14 @@ namespace RedfishService
             }
 
             GSSProvider securityProvider = new GSSProvider(authenticationMechanism);
-            m_server = new SMBLibrary.Server.SMBServer(shares, securityProvider);
+            m_server = new RedfishSMBServer(shares, securityProvider);
             // The provided logging mechanism will synchronously write to the disk during server activity.
             // To maximize server performance, you can disable logging by commenting out the following line.
             m_server.LogEntryAdded += new EventHandler<LogEntry>(m_logWriter.OnLogEntryAdded);
 
             try
             {
-                SMBServer.DirectTCPPort = port;
-                m_server.Start(serverAddress, transportType);
+                m_server.Start(serverAddress, transportType, port);
                 if (transportType == SMBTransportType.NetBiosOverTCP)
                 {
                     if (serverAddress.AddressFamily == AddressFamily.InterNetwork && !IPAddress.Equals(serverAddress, IPAddress.Any))

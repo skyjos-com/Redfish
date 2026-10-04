@@ -3,25 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Net;
 using System.Net.Sockets;
-using System.IO;
 using SMBLibrary;
 using SMBLibrary.Authentication.GSSAPI;
 using SMBLibrary.Authentication.NTLM;
 using SMBLibrary.Server;
-using SMBLibrary.Win32;
-using SMBLibrary.Win32.Security;
 using Utilities;
-using System.Security;
 using System.Windows.Forms;
 using MessageBox = System.Windows.Forms.MessageBox;
 using System.Collections;
@@ -36,7 +25,7 @@ namespace Redfish
 {
     public partial class MainWindow : Window
     {
-        private SMBLibrary.Server.SMBServer m_server;
+        private RedfishSMBServer m_server;
         private SMBLibrary.Server.NameServer m_nameServer;
         private LogWriter m_logWriter;
         private List<ShareSettings> m_sharesSettings;
@@ -165,7 +154,7 @@ namespace Redfish
                 }
 
                 GSSProvider securityProvider = new GSSProvider(authenticationMechanism);
-                m_server = new SMBLibrary.Server.SMBServer(shares, securityProvider);
+                m_server = new RedfishSMBServer(shares, securityProvider);
                 m_logWriter = new LogWriter();
                 // The provided logging mechanism will synchronously write to the disk during server activity.
                 // To maximize server performance, you can disable logging by commenting out the following line.
@@ -173,8 +162,7 @@ namespace Redfish
 
                 try
                 {
-                    SMBServer.DirectTCPPort = port;
-                    m_server.Start(serverAddress, transportType);
+                    m_server.Start(serverAddress, transportType, port);
                     if (transportType == SMBTransportType.NetBiosOverTCP)
                     {
                         if (serverAddress.AddressFamily == AddressFamily.InterNetwork && !IPAddress.Equals(serverAddress, IPAddress.Any))
