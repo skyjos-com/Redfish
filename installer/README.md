@@ -78,16 +78,3 @@ Examples, run elevated:
 Silent setup does not launch the UI. Service registration does not start a fresh, unconfigured service.
 Use `/TASKS=""` to explicitly clear previously selected tasks when installing without them.
 
-## Verification
-
-```powershell
-powershell.exe -NoProfile -File tests\ServiceSmoke.ps1 -Configuration Release
-```
-
-This checks command routing and read-only service interop without modifying machine services.
-Before distributing the package, test install, a running-service upgrade, canceled setup,
-service-helper failure, and uninstall in a disposable Windows VM. Compilation and smoke checks
-do not test those machine-changing operations.
-
-The package is unsigned by default. Configure an Inno `SignTool` and signing certificate when
-building signed releases.
